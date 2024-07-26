@@ -1,6 +1,6 @@
 
 #!/bin/bash
-echo 'hello world'
+echo 'hello world Aviv Test'
 
 
 # git clone <X>
