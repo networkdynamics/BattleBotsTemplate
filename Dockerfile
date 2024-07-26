@@ -1,6 +1,5 @@
-FROM alpine
+FROM python:3
 
-RUN apk add --no-cache docker
-RUN apk add --no-cache git
+RUN pip install requests
 
 CMD ["sh", "run.sh"]

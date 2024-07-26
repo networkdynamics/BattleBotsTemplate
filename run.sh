@@ -1,6 +1,8 @@
 
 #!/bin/bash
-echo 'hello world Aviv Test'
+echo 'Running Aviv Test'
+cd AvivTest
+python3 main.py
 
 
 # git clone <X>
