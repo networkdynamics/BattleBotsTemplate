@@ -6,7 +6,7 @@ url = "https://eager-seas-peel.loca.lt/api/bot/session/temp"
 
 # Request body
 payload = {
-    "num_of_users": 10,
+    "num_of_users": 11,
 }
 
 try:
