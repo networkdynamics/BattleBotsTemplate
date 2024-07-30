@@ -1,5 +1,16 @@
+
 #!/bin/bash
+echo 'hello world'
 
-echo "Test run.sh file"
 
-python3 main_bot.py
+# git clone <X>
+
+# cd <X>
+
+# docker build -t <Y> .
+
+# time = $(date)
+
+# docker run <Y> > output.txt # Expose the ports
+
+# echo "Build completed at $time" > output.txt
