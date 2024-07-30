@@ -1,2 +1,5 @@
+#!/bin/bash
 
-run main.py
+echo "Test run.sh file"
+
+python3 main_bot.py
