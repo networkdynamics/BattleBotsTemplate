@@ -2,7 +2,6 @@
 #!/bin/bash
 echo 'hello world!'
 
-
 # git clone <X>
 
 # cd <X>

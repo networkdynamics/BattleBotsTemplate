@@ -62,7 +62,7 @@ def main():
             signal.alarm(0)
             
             # Inject the new posts and users in the session dataset
-            injectSubSession_response = requests.post(baseUrl + '/api/bot/session/' + str(session_id) + '/' + str(sub_session), headers=header, data=json.dumps(team_injection_response))
+            injectSubSession_response = requests.post(baseUrl + '/api/bot/session/' + str(session_id) + '/' + str(sub_session), headers=header, data=team_injection_response)
             # Verify if response was successful for injectSubSession_response
             injectSubSession_response.raise_for_status()
             # Print the response output
