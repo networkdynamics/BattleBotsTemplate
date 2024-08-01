@@ -7,11 +7,6 @@ baseUrl = "https://little-rabbits-move.loca.lt"
 
 authenticationToken_for_detector = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIyIiwidGVhbU5hbWUiOiJBdml2RGV0ZWN0b3IxIiwiaWF0IjoxNzIyMjgzNjIwLCJleHAiOjE3MjIzNzAwMjB9.rD6FOrD-h22_1l5CQQqSY7pMOj0qZCOeFaXyy48Ev1A'
 
-# Request body
-payload = {
-    "num_of_users": 4
-}
-
 headers = {'Authorization': 'bearer ' + authenticationToken_for_detector, 'Content-Type': 'application/json' }
 
 sessionId = 1
