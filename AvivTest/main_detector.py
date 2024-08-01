@@ -17,7 +17,7 @@ try:
     sessionResponse = requests.get(baseUrl + '/api/detector/session/' + str(sessionId), headers=headers) 
     
     detections = detector_logic.calculateDetections(sessionResponse.json())
-    print('detections ' + str(detections))
+
     detection = requests.post(baseUrl + '/api/detector/session/' + str(sessionId), headers=headers, data=detections) 
 
     
