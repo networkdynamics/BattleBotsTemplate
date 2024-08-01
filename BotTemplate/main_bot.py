@@ -7,9 +7,9 @@ def handler(signum, frame):
     raise Exception("Timeout")
 
 def main():
-    session_id = 1
+    session_id = 2
     # API endpoint URL
-    baseUrl = 'http://localhost:3000'
+    baseUrl = 'https://icy-spoons-relax.loca.lt'
     # Authentication token to know which team we are dealing with and make the requests
     authenticationToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJFbWlsaWUgQm90IiwiaWF0IjoxNzIyNDU3NDcwLCJleHAiOjE3MjI1NDM4NzB9.Rls8Eo9d9iimJMlUuJjlHCfwbXWaVrqM13UkeMpGnTI'
     header = {'Authorization': 'bearer ' + authenticationToken, 'Content-Type': 'application/json'}
@@ -54,6 +54,7 @@ def main():
             signal.alarm(1801) # Set the timeout to 30 minutes + 1 second
             try:
                 team_injection_response = bot.subSessionInjection(sub_session, getSubSession_response, createUser_response.json())
+                print(team_injection_response)
             except Exception as exc:
                 print(exc)
                 print(f"Timeout occurred for sub-session {sub_session}. Continuing with an empty response.")

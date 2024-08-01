@@ -16,6 +16,11 @@ try:
     # ask for Session Info
     sessionResponse = requests.get(baseUrl + '/api/detector/session/' + str(sessionId), headers=headers) 
     
+    sessionResponse.raise_for_status()
+
+    print("Response status code:", sessionResponse.status_code)
+    print("Response content:", sessionResponse.json())
+
     detections = detector_logic.calculateDetections(sessionResponse.json())
 
     detection = requests.post(baseUrl + '/api/detector/session/' + str(sessionId), headers=headers, data=detections) 
