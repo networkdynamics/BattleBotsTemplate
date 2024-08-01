@@ -7,7 +7,7 @@ def handler(signum, frame):
     raise Exception("Timeout")
 
 def main():
-    session_id = 2
+    session_id = 3
     # API endpoint URL
     baseUrl = 'https://icy-spoons-relax.loca.lt'
     # Authentication token to know which team we are dealing with and make the requests
