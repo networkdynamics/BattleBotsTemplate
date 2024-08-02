@@ -54,7 +54,6 @@ def main():
             signal.alarm(1801) # Set the timeout to 30 minutes + 1 second
             try:
                 team_injection_response = bot.subSessionInjection(sub_session, getSubSession_response, createUser_response.json())
-                print(team_injection_response)
             except Exception as exc:
                 print(exc)
                 print(f"Timeout occurred for sub-session {sub_session}. Continuing with an empty response.")
