@@ -11,7 +11,7 @@ def main():
     # API endpoint URL
     baseUrl = 'https://many-bears-call.loca.lt'
     # Authentication token to know which team we are dealing with and make the requests
-    authenticationToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJFbWlsaWUgQm90IiwiaWF0IjoxNzIyNDU3NDcwLCJleHAiOjE3MjI1NDM4NzB9.Rls8Eo9d9iimJMlUuJjlHCfwbXWaVrqM13UkeMpGnTI'
+    authenticationToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI1IiwidGVhbU5hbWUiOiJCb3QxIiwiaWF0IjoxNzIyNTg0MTg4LCJleHAiOjE3MjI2NzA1ODh9.CLrWBb60kz9Zmkk2f8CaNQCbc_jSQW4znGYels1h2e8'
     header = {'Authorization': 'bearer ' + authenticationToken, 'Content-Type': 'application/json'}
     sub_sessions_id = []
 
