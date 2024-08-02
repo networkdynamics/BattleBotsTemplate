@@ -9,7 +9,7 @@ authenticationToken_for_detector = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWF
 
 headers = {'Authorization': 'bearer ' + authenticationToken_for_detector, 'Content-Type': 'application/json' }
 
-sessionId = 1
+sessionId = 4
 
 try:
 
