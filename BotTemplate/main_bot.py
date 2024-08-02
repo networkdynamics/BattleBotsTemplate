@@ -9,7 +9,7 @@ def handler(signum, frame):
 def main():
     session_id = 3
     # API endpoint URL
-    baseUrl = 'https://icy-spoons-relax.loca.lt'
+    baseUrl = 'https://big-flies-sin.loca.lt'
     # Authentication token to know which team we are dealing with and make the requests
     authenticationToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJFbWlsaWUgQm90IiwiaWF0IjoxNzIyNDU3NDcwLCJleHAiOjE3MjI1NDM4NzB9.Rls8Eo9d9iimJMlUuJjlHCfwbXWaVrqM13UkeMpGnTI'
     header = {'Authorization': 'bearer ' + authenticationToken, 'Content-Type': 'application/json'}
