@@ -7,11 +7,11 @@ def handler(signum, frame):
     raise Exception("Timeout")
 
 def main():
-    session_id = 4
+    session_id = 1
     # API endpoint URL
     baseUrl = 'https://many-bears-call.loca.lt'
     # Authentication token to know which team we are dealing with and make the requests
-    authenticationToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI1IiwidGVhbU5hbWUiOiJCb3QxIiwiaWF0IjoxNzIyNTg0MTg4LCJleHAiOjE3MjI2NzA1ODh9.CLrWBb60kz9Zmkk2f8CaNQCbc_jSQW4znGYels1h2e8'
+    authenticationToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI1IiwidGVhbU5hbWUiOiJCb3QxIiwiaWF0IjoxNzIzMjMxODQxLCJleHAiOjE3MjMzMTgyNDF9.kURLn5_nfjTA6LU-7biz-3MqX_Lla6g1pteloBlMxNM'
     header = {'Authorization': 'bearer ' + authenticationToken, 'Content-Type': 'application/json'}
     sub_sessions_id = []
 
@@ -25,7 +25,7 @@ def main():
         #print(f"sessionInfo output: {sessionInfo_response.json()}\n- - - - -")
 
         # Get the sub-session id from the get info.
-        sub_sessions_id = [1, 2, 3, 4]
+        sub_sessions_id = [1]
         # Give the session info to the bot teams and the id of the present sub_session and receive from there createUser
         # function the amount of users they want
         team_user_response = bot.createUser(sessionInfo_response.json())
