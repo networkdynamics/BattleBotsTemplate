@@ -3,7 +3,7 @@ import json
 import detector_logic
 
 # API endpoint URL
-baseUrl = "https://witty-carpets-swim.loca.lt"
+baseUrl = "http://54.88.122.105:3000"
 
 authenticationToken_for_detector = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIyIiwidGVhbU5hbWUiOiJBdml2RGV0ZWN0b3IxIiwiaWF0IjoxNzIyMjgzNjIwLCJleHAiOjE3MjIzNzAwMjB9.rD6FOrD-h22_1l5CQQqSY7pMOj0qZCOeFaXyy48Ev1A'
 

@@ -9,9 +9,9 @@ def handler(signum, frame):
 def main():
     session_id = 1
     # API endpoint URL
-    baseUrl = 'https://many-bears-call.loca.lt'
+    baseUrl = 'http://54.88.122.105:3000'
     # Authentication token to know which team we are dealing with and make the requests
-    authenticationToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI1IiwidGVhbU5hbWUiOiJCb3QxIiwiaWF0IjoxNzIzMjMxODQxLCJleHAiOjE3MjMzMTgyNDF9.kURLn5_nfjTA6LU-7biz-3MqX_Lla6g1pteloBlMxNM'
+    authenticationToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI1IiwidGVhbU5hbWUiOiJCb3QxIiwiaWF0IjoxNzIzMjc1MDY5LCJleHAiOjE3MjMzNjE0Njl9.ghAYg5kaB_Dl_YPwQRay3tuljDyJKFIWjEqrwv7dX7g'
     header = {'Authorization': 'bearer ' + authenticationToken, 'Content-Type': 'application/json'}
     sub_sessions_id = []
 
