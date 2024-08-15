@@ -1,15 +1,19 @@
 import requests
 import json
-import detector_logic
+from DetectorCode.detector_logic import Detector
+import signal
 
 # API endpoint URL
-baseUrl = "http://54.88.122.105:3000"
+baseUrl = "http://localhost:3000"
 
-authenticationToken_for_detector = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIyIiwidGVhbU5hbWUiOiJBdml2RGV0ZWN0b3IxIiwiaWF0IjoxNzIyMjgzNjIwLCJleHAiOjE3MjIzNzAwMjB9.rD6FOrD-h22_1l5CQQqSY7pMOj0qZCOeFaXyy48Ev1A'
+authenticationToken_for_detector = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI0IiwidGVhbU5hbWUiOiJFbWlsaWUgRGV0ZWN0b3IiLCJpYXQiOjE3MjM2ODMwOTYsImV4cCI6MTcyMzc2OTQ5Nn0.aH4YkdfIfWC7CbseVkjN88icUKcM6hm_0gTZ4ggt3kE'
 
 headers = {'Authorization': 'bearer ' + authenticationToken_for_detector, 'Content-Type': 'application/json' }
 
 sessionId = 4
+
+def handler(signum, frame):
+    raise Exception("Timeout")
 
 try:
 
@@ -21,7 +25,16 @@ try:
     print("Response status code:", sessionResponse.status_code)
     print("Response content:", sessionResponse.json())
 
-    detections = detector_logic.calculateDetections(sessionResponse.json())
+    signal.signal(signal.SIGALRM, handler)
+    signal.alarm(3601)
+    try:
+        detections = Detector.calculateDetections(sessionResponse.json())
+    except Exception as exc:
+        print(exc)
+        print("Timeout: The code took more than one hour to run. Continue with an empty submission.")
+        detections = json.dumps({"users": []})
+
+    signal.alarm(0)
 
     detection = requests.post(baseUrl + '/api/detector/session/' + str(sessionId), headers=headers, data=detections) 
 
@@ -31,7 +44,7 @@ try:
     
     # Print the response
     print("Response status code:", detection.status_code)
-    print("Response content:", detection.json())
+    print("Response content:", json.dumps(detection.json(), indent=4))
 
 except requests.exceptions.RequestException as e:
     print("An error occurred:", e)
