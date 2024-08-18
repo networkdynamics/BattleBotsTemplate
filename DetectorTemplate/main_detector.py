@@ -1,50 +1,67 @@
+from constants import detector_session_id, detect_bot_max_time
 import requests
 import json
-from DetectorCode.detector_logic import Detector
+from DetectorTemplate.DetectorCode.detector import Detector
+import logging
 import signal
 
+logging.basicConfig(
+    filename='DetectorTemplate/run.log',
+    filemode='w',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+class TimeoutError(Exception):
+    """Custom exception for timeout errors."""
+    pass
+
 # API endpoint URL
-baseUrl = "http://localhost:3000"
+base_url = "http://localhost:3000"
 
-authenticationToken_for_detector = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI0IiwidGVhbU5hbWUiOiJFbWlsaWUgRGV0ZWN0b3IiLCJpYXQiOjE3MjM2ODMwOTYsImV4cCI6MTcyMzc2OTQ5Nn0.aH4YkdfIfWC7CbseVkjN88icUKcM6hm_0gTZ4ggt3kE'
+authentication_token_for_detector = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI0IiwidGVhbU5hbWUiOiJFbWlsaWUgRGV0ZWN0b3IiLCJpYXQiOjE3MjM4NTUyODksImV4cCI6MTcyMzk0MTY4OX0.lTzqaLW3tcLO15_CGsyNA-SWYhl1UDlRGwJozbyJU-A'
 
-headers = {'Authorization': 'bearer ' + authenticationToken_for_detector, 'Content-Type': 'application/json' }
-
-sessionId = 4
+headers = {'Authorization': 'bearer ' + authentication_token_for_detector, 'Content-Type': 'application/json' }
 
 def handler(signum, frame):
-    raise Exception("Timeout")
+    raise TimeoutError("Timeout Error:")
 
+logging.info(f"START SESSION {detector_session_id}")
 try:
-
+    detector = Detector()
     # ask for Session Info
-    sessionResponse = requests.get(baseUrl + '/api/detector/session/' + str(sessionId), headers=headers) 
+    session_dataset = requests.get(base_url + '/api/detector/session/' + str(detector_session_id), headers=headers) 
     
-    sessionResponse.raise_for_status()
+    session_dataset.raise_for_status()
 
-    print("Response status code:", sessionResponse.status_code)
-    print("Response content:", sessionResponse.json())
+    logging.info(f"Get Session response status code: {session_dataset.status_code}")
+    print("Get Session response status code:", session_dataset.status_code)
+    print("Get Session response content:", session_dataset.json())
 
     signal.signal(signal.SIGALRM, handler)
-    signal.alarm(3601)
+    signal.alarm(detect_bot_max_time)
     try:
-        detections = Detector.calculateDetections(sessionResponse.json())
-    except Exception as exc:
-        print(exc)
-        print("Timeout: The code took more than one hour to run. Continue with an empty submission.")
-        detections = json.dumps({"users": []})
+        detections_submission = detector.detect_bot(session_dataset.json())
+    except TimeoutError as exc:
+        logging.error(f"{exc} The code took more than one hour to run. Continue with an empty submission.")
+        print(f"{exc} The code took more than one hour to run. Continue with an empty submission.")
+        detections_submission = json.dumps({"users": []})
 
     signal.alarm(0)
 
-    detection = requests.post(baseUrl + '/api/detector/session/' + str(sessionId), headers=headers, data=detections) 
+    submission_confirmation = requests.post(base_url + '/api/detector/session/' + str(detector_session_id), headers=headers, data=detections_submission) 
 
     
     # Check if the request was successful
-    detection.raise_for_status()
+    submission_confirmation.raise_for_status()
     
     # Print the response
-    print("Response status code:", detection.status_code)
-    print("Response content:", json.dumps(detection.json(), indent=4))
+    logging.info(f"Detection Submission repsonse status code: {submission_confirmation.status_code}")
+    print("Detection Submission repsonse status code:", submission_confirmation.status_code)
+    print("Detection Submission response content:", json.dumps(submission_confirmation.json(), indent=4))
+
+    logging.info(f"END SESSION {detector_session_id}")
 
 except requests.exceptions.RequestException as e:
+    logging.error(f"An error occurred: {e}")
     print("An error occurred:", e)

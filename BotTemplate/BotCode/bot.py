@@ -1,13 +1,25 @@
 import json
+from abc import ABC, abstractmethod
 
-class Bot:
-    def createUser(session_info):
+class ABot(ABC):
+    @abstractmethod
+    def create_user(self, session_info):
+        """Create a user based on session information."""
+        pass
+
+    @abstractmethod
+    def generate_content(self, sub_session_id, datasets_json, users_id):
+        """Generate content based on provided parameters."""
+        pass
+
+class Bot(ABot):
+    def create_user(self, session_info):
         # Implement logic here and replace the return value with the number of users you want to create.
         # Example:
         number_user = 2
         return number_user
 
-    def subSessionInjection(sub_session_id, datasets_json, users_id):
+    def generate_content(self, sub_session_id, datasets_json, users_id):
         # Implement your code to process the datasets here.
         # It needs to return json with the users and their description and the posts to be inserted.
         # Example:
