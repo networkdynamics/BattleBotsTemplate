@@ -5,9 +5,9 @@ import json
 # Environment Variables
 base_url = 'http://localhost:3000'
 # Bot authentication_token
-#authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJFbWlsaWUgQm90IiwiaWF0IjoxNzI0MDI5NTAyLCJleHAiOjE3MjQxMTU5MDJ9.CU-2YGkkU-i6YVK3zZNfFo4mbtIwSJ6biaGLwuRgMlY'
+authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIxIiwidGVhbU5hbWUiOiJCb3QxIiwiaWF0IjoxNzI0MzU3ODI4LCJleHAiOjE3MjQ0NDQyMjh9.TPu0XREGcAPJNt1Ud0CIH53vtAfa90r9e_7nSKHF4qQ'
 # Detector authentication_token
-authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJEZXRlY3RvcjEiLCJpYXQiOjE3MjQzNTY5MTMsImV4cCI6MTcyNDQ0MzMxM30.RkzdAZCyoTW77fLn7tmDkM6wHd8a-7Ok-UFOicIcrt4'
+#authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJEZXRlY3RvcjEiLCJpYXQiOjE3MjQzNTY5MTMsImV4cCI6MTcyNDQ0MzMxM30.RkzdAZCyoTW77fLn7tmDkM6wHd8a-7Ok-UFOicIcrt4'
 header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
 #BOT SECTION
@@ -28,6 +28,8 @@ class SubSessionDataset:
 
 def get_session_info():
     response = requests.get(base_url + '/api/bot/session/' + str(bot_session_id) + '/info', headers=header)
+    print(response.text)
+    print(response.content)
     return response, SessionInfo(response.json())
     
 def create_user_id(number_users):
@@ -55,7 +57,6 @@ class SessionDataset:
 
 def get_session_data():
     response = requests.get(base_url + '/api/detector/session/' + str(detector_session_id), headers=header)
-    print(response.json())
     return response, SessionDataset(response.json())
     
 def submit_detection(detections_submission):
