@@ -9,7 +9,7 @@ import signal
 from constants import detector_session_id, detect_bot_max_time
 from pydantic import ValidationError
 from teams_classes import DetectionMark
-from api_requests import DetectorRequests
+from api_requests import get_session_data, submit_detection
 
 logging.basicConfig(
     filename='DetectorTemplate/run.log',
@@ -22,13 +22,6 @@ class TimeoutError(Exception):
     """Custom exception for timeout errors."""
     pass
 
-# API endpoint URL
-#base_url = "http://localhost:3000"
-
-#authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI0IiwidGVhbU5hbWUiOiJFbWlsaWUgRGV0ZWN0b3IiLCJpYXQiOjE3MjQwMjAzNDMsImV4cCI6MTcyNDEwNjc0M30.kBwhxS5Xr_mjt4fZNIDPUUin-cAWdFVNmOTyYS0L3Jg'
-
-#headers = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json' }
-
 def handler(signum, frame):
     raise TimeoutError("Timeout Error:")
 
@@ -36,19 +29,18 @@ logging.info(f"START SESSION {detector_session_id}")
 try:
     detector = Detector()
     # ask for Session Info
-    #session_dataset = requests.get(base_url + '/api/detector/session/' + str(detector_session_id), headers=headers) 
-    session_dataset = DetectorRequests.get_session_data()
+    get_session_response, session_dataset = get_session_data()
     
-    session_dataset.raise_for_status()
+    get_session_response.raise_for_status()
 
-    logging.info(f"Get Session response status code: {session_dataset.status_code}")
-    print("Get Session response status code:", session_dataset.status_code)
+    logging.info(f"Get Session response status code: {get_session_response.status_code}")
+    print("Get Session response status code:", get_session_response.status_code)
     #print("Get Session response content:", session_dataset.json())
 
     signal.signal(signal.SIGALRM, handler)
     signal.alarm(detect_bot_max_time)
     try:
-        marked_account = detector.detect_bot(session_dataset.json())
+        marked_account = detector.detect_bot(session_dataset)
         if len(marked_account) == 0: # Empty submission
             detections_submission = []  
         elif not isinstance(marked_account[0], DetectionMark): #If the teams don't return a list of DetectionMark instance/object???.
@@ -62,8 +54,7 @@ try:
 
     signal.alarm(0)
 
-    #submission_confirmation = requests.post(base_url + '/api/detector/session/' + str(detector_session_id), headers=headers, data=json.dumps({"users": detections_submission}))
-    submission_confirmation = DetectorRequests.submit_detection(detections_submission) 
+    submission_confirmation = submit_detection(detections_submission) 
     
     # Check if the request was successful
     submission_confirmation.raise_for_status()

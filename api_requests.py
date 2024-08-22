@@ -7,21 +7,56 @@ base_url = 'http://localhost:3000'
 # Bot authentication_token
 #authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJFbWlsaWUgQm90IiwiaWF0IjoxNzI0MDI5NTAyLCJleHAiOjE3MjQxMTU5MDJ9.CU-2YGkkU-i6YVK3zZNfFo4mbtIwSJ6biaGLwuRgMlY'
 # Detector authentication_token
-authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiI0IiwidGVhbU5hbWUiOiJFbWlsaWUgRGV0ZWN0b3IiLCJpYXQiOjE3MjQwMjAzNDMsImV4cCI6MTcyNDEwNjc0M30.kBwhxS5Xr_mjt4fZNIDPUUin-cAWdFVNmOTyYS0L3Jg'
+authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJEZXRlY3RvcjEiLCJpYXQiOjE3MjQzNTY5MTMsImV4cCI6MTcyNDQ0MzMxM30.RkzdAZCyoTW77fLn7tmDkM6wHd8a-7Ok-UFOicIcrt4'
 header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
-class BotRequests:
-    def get_session_info():
-        return requests.get(base_url + '/api/bot/session/' + str(bot_session_id) + '/info', headers=header)
-    def create_user_id(number_users):
-        return requests.post(base_url + '/api/bot/session/' + str(bot_session_id) + '/createuser', headers=header, data=json.dumps({"num_of_users": number_users}))
-    def get_sub_session(sub_session):
-        return requests.get(base_url + '/api/bot/session/' + str(bot_session_id) + '/' + str(sub_session), headers=header)
-    def submit_injection(sub_session, posts_submission, users_submission):
-        return requests.post(base_url + '/api/bot/session/' + str(bot_session_id) + '/' + str(sub_session), headers=header, data=json.dumps({"posts": posts_submission, "users": users_submission}))
+#BOT SECTION
+class SessionInfo:
+    def __init__(self, data):
+        self.session_id = data["session_id"]
+        self.metadata = data["metadata"]
+        self.sub_sessions_id = data["sub_sessions_id"]
+        self.influence_target = data["influence_target"]
+        self.users = data["users"]
 
-class DetectorRequests:
-    def get_session_data():
-        return requests.get(base_url + '/api/detector/session/' + str(detector_session_id), headers=header) 
-    def submit_detection(detections_submission):
-        return requests.post(base_url + '/api/detector/session/' + str(detector_session_id), headers=header, data=json.dumps({"users": detections_submission}))
+class SubSessionDataset:
+    def __init__(self, data):
+        self.sub_session_id = data["sub_session_id"]
+        self.metadata = data["metadata"]
+        self.posts = data["posts"]
+        #self.users = data["users"]
+
+def get_session_info():
+    response = requests.get(base_url + '/api/bot/session/' + str(bot_session_id) + '/info', headers=header)
+    return response, SessionInfo(response.json())
+    
+def create_user_id(number_users):
+    response = requests.post(base_url + '/api/bot/session/' + str(bot_session_id) + '/createuser', headers=header, data=json.dumps({"num_of_users": number_users}))
+    users_id_list = []
+    for user in response.json()['users']:
+        users_id_list.append(user['id'])
+
+    return response, users_id_list
+    
+def get_sub_session(sub_session):
+    response = requests.get(base_url + '/api/bot/session/' + str(bot_session_id) + '/' + str(sub_session), headers=header)
+    return response, SubSessionDataset(response.json())
+    
+def submit_injection(sub_session, posts_submission, users_submission):
+    return requests.post(base_url + '/api/bot/session/' + str(bot_session_id) + '/' + str(sub_session), headers=header, data=json.dumps({"posts": posts_submission, "users": users_submission}))
+
+# DETECTOR SECTION
+class SessionDataset:
+    def __init__(self, data):
+        self.session_id = data["id"]
+        self.metadata = data["metadata"]
+        self.posts = data["posts"]
+        self.users = data["users"]
+
+def get_session_data():
+    response = requests.get(base_url + '/api/detector/session/' + str(detector_session_id), headers=header)
+    print(response.json())
+    return response, SessionDataset(response.json())
+    
+def submit_detection(detections_submission):
+    return requests.post(base_url + '/api/detector/session/' + str(detector_session_id), headers=header, data=json.dumps({"users": detections_submission}))

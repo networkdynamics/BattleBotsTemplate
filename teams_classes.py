@@ -17,7 +17,7 @@ class User(BaseModel):
     def to_dict(self):
         return {
             "id": self.user_id,
-            "tweet_count": 1,
+            "tweet_count": 0,
             "z_score": 0,
             "username": self.username,
             "name": self.name,
@@ -43,22 +43,40 @@ class NewPost(BaseModel):
             "user": self.user.to_dict() # Wait right now something weird is that if we give more to the submission, like this line, the part of code of Aviv do not throw an error, it still takes it. Also we really need to talk with Aviv to make everything uniform.
         }
 
-class Post(BaseModel):
-    post_id: constr(min_length=1)
-    text: str
-    author_id: constr(min_length=1)
-    created_at: str
-    lang: Literal['en', 'fr']
-    user: User
-
 class DetectionMark(BaseModel):
-    userId: constr(min_length=1) #Change userId to user_id
+    user_id: constr(min_length=1) #Change userId to user_id
     confidence: conint(ge=0, le=100)
     bot: bool #Add this one to be able to request from them to tell us if they think an account is actually a bot or not
 
     def to_dict(self):
         return {
-            "userId": self.userId,
+            "user_id": self.user_id,
             "confidence": self.confidence,
             "bot": self.bot
         }
+    
+#class SessionInfo(BaseModel):
+#    response_status_code: str
+#    session_id: str
+#    metadata: dict
+#    sub_sessions_id: str
+#    influence_target: dict
+#    users: [User]
+
+#class UsersIdList(BaseModel):
+#    response_status_code: str
+#    id_list: [str]
+
+#class SubSessionDataset(BaseModel):
+#    response_status_code: str
+#    sub_session_id: str
+#    metadata: dict
+#    posts: dict
+#    users: dict
+
+#class SessionDataset(BaseModel):
+#    response_status_code: str
+#    session_id: str
+#    metadata: dict
+#    posts: dict
+#    users: dict
