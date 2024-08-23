@@ -1,4 +1,4 @@
-from abs_classes import ADetector
+from abc_classes import ADetector
 from teams_classes import DetectionMark
 
 class Detector(ADetector):

@@ -40,7 +40,6 @@ class NewPost(BaseModel):
             "author_id": self.author_id,
             "created_at": self.created_at,
             "lang": self.lang,
-            "user": self.user.to_dict() # Wait right now something weird is that if we give more to the submission, like this line, the part of code of Aviv do not throw an error, it still takes it. Also we really need to talk with Aviv to make everything uniform.
         }
 
 class DetectionMark(BaseModel):

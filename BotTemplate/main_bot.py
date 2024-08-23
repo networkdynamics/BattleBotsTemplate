@@ -38,14 +38,14 @@ def main():
         # Print the response output
         logging.info(f"Session Info response status code: {session_info_response.status_code}")
         print("Session Info response status code:", session_info_response.status_code)
-        print(f"Session Info output: {json.dumps(session_info_response.json(), indent=4)}\n- - - - -")
+        #print(f"Session Info output: {json.dumps(session_info_response.json(), indent=4)}\n- - - - -")
 
         # Give the session info to the bot teams and the id of the present sub_session and receive from there createUser
         # function the amount of users they want
         signal.signal(signal.SIGALRM, handler)
         signal.alarm(bot_code_max_time)
 
-        new_users = bot.create_user(session_info.json())
+        new_users = bot.create_user(session_info)
         number_users = len(new_users)
 
         # Create the users for the team according to their response, the default value should be 1
@@ -56,7 +56,7 @@ def main():
         # Print the response output
         logging.info(f"Create User response status code: {create_user_response.status_code}")
         print("Create User response status code:", create_user_response.status_code)
-        print(f"Create User output: {json.dumps(create_user_response.json(), indent=4)}\n- - - - -")
+        #print(f"Create User output: {json.dumps(create_user_response.json(), indent=4)}\n- - - - -")
 
         #Make the Users list
         bot_users = []
@@ -72,7 +72,7 @@ def main():
             # Print the response output
             logging.info(f"Get Sub-Session response status code: {get_sub_response.status_code}")
             print("Get Sub-Session response status code:", get_sub_response.status_code)
-            print(f"Get Sub-Session output:{json.dumps(get_sub_response.json(), indent=4)}\n- - - - -")
+            #print(f"Get Sub-Session output:{json.dumps(get_sub_response.json(), indent=4)}\n- - - - -")
 
             # Give the datasets and the list of users id to the team and make them start the run of their code and timeout if too long
             # Run subSessionInjection
@@ -87,7 +87,6 @@ def main():
             # Make the json submission (should probably also check here for any weird trick in post text and all)
             posts_submission = [post.to_dict() for post in team_submission]
             users_submission = [user.to_dict() for user in bot_users]
-
             # Inject the new posts and users in the session dataset
             #submission_confirmation = requests.post(base_url + '/api/bot/session/' + str(bot_session_id) + '/' + str(sub_session), headers=header, data=json.dumps({"posts": posts_submission, "users": users_submission}))
             submission_confirmation = submit_injection(sub_session, posts_submission, users_submission)
@@ -96,7 +95,7 @@ def main():
             # Print the response output
             logging.info(f"Inject Sub-Session response status code: {submission_confirmation.status_code}")
             print("Inject Sub-Session response status code:", submission_confirmation.status_code)
-            print(f"Inject Sub-Session output: {json.dumps(submission_confirmation.json(), indent=4)}\n- - - - -")
+            #print(f"Inject Sub-Session output: {json.dumps(submission_confirmation.json(), indent=4)}\n- - - - -")
         # Maybe add time stamp for analysis.
         logging.info(f"END SESSION {bot_session_id}")
 
