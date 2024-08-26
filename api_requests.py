@@ -9,7 +9,7 @@ authentication_token = os.getenv('AUTH_TOKEN')
 
 base_url = os.environ.get('BASE_URL')
 
-print("try1 " + str(base_url))
+print("testtest " + str(base_url))
 
 header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
