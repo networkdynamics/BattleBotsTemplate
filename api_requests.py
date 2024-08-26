@@ -7,6 +7,10 @@ import json
 base_url = os.getenv('BASE_URL')
 authentication_token = os.getenv('AUTH_TOKEN')
 
+base_url = os.environ.get('BASE_URL')
+
+print("try1 " + str(base_url))
+
 header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
 #BOT SECTION
