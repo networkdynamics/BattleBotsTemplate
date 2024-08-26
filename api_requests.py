@@ -1,13 +1,12 @@
+import os
 import requests
 from constants import bot_session_id, detector_session_id
 import json
 
 # Environment Variables
-base_url = 'http://localhost:3000'
-# Bot authentication_token
-authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIxIiwidGVhbU5hbWUiOiJCb3QxIiwiaWF0IjoxNzI0NDQxOTkwLCJleHAiOjE3MjQ1MjgzOTB9.uDOLyZMtwYlXuYbdBaF4GaekHQRasc91zndC49bhL0A'
-# Detector authentication_token
-#authentication_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOiIzIiwidGVhbU5hbWUiOiJEZXRlY3RvcjEiLCJpYXQiOjE3MjQ0NDIxMTYsImV4cCI6MTcyNDUyODUxNn0.-qXvRUh8Qm0zq-hveZOni2nKs-onzQ7ubPyQF-Aji3M'
+base_url = os.getenv('BASE_URL')
+authentication_token = os.getenv('AUTH_TOKEN')
+
 header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
 #BOT SECTION
@@ -32,7 +31,10 @@ class SubSessionDataset:
 
 def get_session_info():
     response = requests.get(base_url + '/api/bot/session/' + str(bot_session_id) + '/info', headers=header)
-    return response, SessionInfo(response.json())
+    if response.status_code >= 400:
+        return response, []
+    else:
+        return response, SessionInfo(response.json())
     
 def create_user_id(number_users):
     response = requests.post(base_url + '/api/bot/session/' + str(bot_session_id) + '/createuser', headers=header, data=json.dumps({"num_of_users": number_users}))
@@ -44,7 +46,10 @@ def create_user_id(number_users):
     
 def get_sub_session(sub_session):
     response = requests.get(base_url + '/api/bot/session/' + str(bot_session_id) + '/' + str(sub_session), headers=header)
-    return response, SubSessionDataset(response.json())
+    if response.status_code >= 400:
+        return response, []
+    else:
+        return response, SubSessionDataset(response.json())
     
 def submit_injection(sub_session, posts_submission, users_submission):
     print(json.dumps({"posts": posts_submission, "users": users_submission}, indent=4))
@@ -61,8 +66,10 @@ class SessionDataset:
 
 def get_session_data():
     response = requests.get(base_url + '/api/detector/session/' + str(detector_session_id), headers=header)
-    return response, SessionDataset(response.json())
+    if response.status_code >= 400:
+        return response, []
+    else:
+        return response, SessionDataset(response.json())
     
 def submit_detection(detections_submission):
-    print(json.dumps({"users": detections_submission}))
     return requests.post(base_url + '/api/detector/session/' + str(detector_session_id), headers=header, data=json.dumps({"users": detections_submission}))

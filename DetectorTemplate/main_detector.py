@@ -2,7 +2,6 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import requests
-import json
 from DetectorTemplate.DetectorCode.detector import Detector
 import logging
 import signal
@@ -43,16 +42,14 @@ try:
         marked_account = detector.detect_bot(session_dataset)
         if len(marked_account) == 0: # Empty submission
             detections_submission = []  
-        elif not isinstance(marked_account[0], DetectionMark): #If the teams don't return a list of DetectionMark instance/object???.
-            raise TypeError("The elements of the list should be DetectionMark instance. Make sure to return a list[DetectionMark].")
+        elif not isinstance(marked_account[0], DetectionMark): # If the teams don't return a list of DetectionMark instance/object.
+            raise TypeError(f"The elements of the list should be DetectionMark instance not {type(marked_account[0])}. Make sure to return a list[DetectionMark].")
         else:
             detections_submission = [user.to_dict() for user in marked_account]
     except TimeoutError as exc:
         logging.error(f"{exc} The code took more than one hour to run. Continue with an empty submission.")
         print(f"{exc} The code took more than one hour to run. Continue with an empty submission.")
         detections_submission = []
-
-    signal.alarm(0)
 
     submission_confirmation = submit_detection(detections_submission) 
     
@@ -62,8 +59,9 @@ try:
     # Print the response
     logging.info(f"Detection Submission repsonse status code: {submission_confirmation.status_code}")
     print("Detection Submission repsonse status code:", submission_confirmation.status_code)
-    print("Detection Submission response content:", json.dumps(submission_confirmation.json(), indent=4))
+    #print("Detection Submission response content:", json.dumps(submission_confirmation.json(), indent=4))
 
+    signal.alarm(0)
     logging.info(f"END SESSION {detector_session_id}")
 
 except (requests.exceptions.RequestException, ValidationError, TypeError) as exc:
