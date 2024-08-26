@@ -11,6 +11,10 @@ base_url = os.environ.get('BASE_URL')
 
 print("testtest " + str(base_url))
 
+base_url = os.environ.get('BASE_URL2')
+
+print("testtest " + str(base_url))
+
 header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
 #BOT SECTION
