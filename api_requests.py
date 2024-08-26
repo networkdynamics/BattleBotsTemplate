@@ -21,6 +21,7 @@ class SessionInfo:
         self.sub_sessions_info = data["sub_sessions_info"]
         self.sub_sessions_id = [sub_session["sub_session_id"] for sub_session in data["sub_sessions_info"]]
         self.users = data["users"]
+        self.usernames = set([user["username"] for user in data["users"]])
 
 class SubSessionDataset:
     def __init__(self, data):
