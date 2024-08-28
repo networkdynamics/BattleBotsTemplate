@@ -7,13 +7,6 @@ import json
 base_url = os.getenv('BASE_URL')
 authentication_token = os.getenv('AUTH_TOKEN')
 
-print("All environment variables:")
-for key, value in os.environ.items():
-    print(f"{key}: {value}")
-
-my_var = os.environ['BASE_URL']
-print(f"MY_VARIABLE: {my_var}")
-
 header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
 #BOT SECTION
