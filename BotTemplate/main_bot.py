@@ -2,7 +2,6 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import requests
-import json
 from BotCode.bot import Bot
 import logging
 import signal
@@ -21,6 +20,10 @@ logging.basicConfig(
 
 class TimeoutError(Exception):
     """Custom exception for timeout errors."""
+    pass
+
+class UsernameAlreadyTakenError(Exception):
+    """Custom exception for duplicate usernames."""
     pass
 
 def handler(signum, frame):
@@ -46,6 +49,14 @@ def main():
         
         
         new_users = bot.create_user(session_info)
+
+        # Verify username unique
+        for user in new_users:
+            if user.username in session_info.usernames:
+                raise UsernameAlreadyTakenError(f"UsernameAlreadyTakenError: Username need to be unique and the username {user.username} is already taken.")
+            else:
+                session_info.usernames.add(user.username)
+        # Verify submission format    
         if len(new_users) == 0: # Empty submission
             raise ValueError(f"Need at least 1 user create. Right now list of users is empty.")
         elif not isinstance(new_users[0], NewUser): # If the teams don't return a list of NewUser instance/object.
@@ -106,7 +117,7 @@ def main():
         # Maybe add time stamp for analysis.
         logging.info(f"END SESSION {bot_session_id}")
 
-    except (requests.exceptions.RequestException, ValidationError, TimeoutError, ValueError, TypeError) as exc:
+    except (requests.exceptions.RequestException, ValidationError, TimeoutError, ValueError, TypeError, UsernameAlreadyTakenError) as exc:
         if isinstance(exc, requests.exceptions.RequestException):
             logging.error(f"An error occured: {exc}")
             print("An error occurred:", exc)
@@ -116,7 +127,7 @@ def main():
         elif isinstance(exc, TimeoutError):
             logging.error(f"{exc} The code to Create User ran for too long. No submission were able to be submitted.")
             print(f"{exc} The code to Create User ran for too long. No submission were able to be submitted.")
-        elif isinstance(exc, (ValueError, TypeError)):
+        elif isinstance(exc, (ValueError, TypeError, UsernameAlreadyTakenError)):
             logging.error(exc)
             print(exc)
 
