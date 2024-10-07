@@ -9,6 +9,7 @@ from constants import detector_session_id, detect_bot_max_time
 from pydantic import ValidationError
 from teams_classes import DetectionMark
 from api_requests import get_session_data, submit_detection
+import json
 
 logging.basicConfig(
     filename='DetectorTemplate/run.log',
