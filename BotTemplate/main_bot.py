@@ -9,6 +9,7 @@ from constants import bot_session_id, bot_code_max_time
 from pydantic import ValidationError
 from teams_classes import User, NewUser, NewPost
 from api_requests import get_session_info, create_user_id, get_sub_session, submit_injection
+import json
 
 
 logging.basicConfig(
