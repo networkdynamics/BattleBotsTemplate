@@ -5,11 +5,13 @@ import requests
 from DetectorTemplate.DetectorCode.detector import Detector
 import logging
 import signal
-from constants import detector_session_id, detect_bot_max_time
 from pydantic import ValidationError
 from teams_classes import DetectionMark
 from api_requests import get_session_data, submit_detection
 import json
+
+session_id = os.getenv('SESSION_ID')
+code_max_time = os.getenv('MAX_TIME')
 
 logging.basicConfig(
     filename='DetectorTemplate/run.log',
@@ -25,7 +27,7 @@ class TimeoutError(Exception):
 def handler(signum, frame):
     raise TimeoutError("Timeout Error:")
 
-logging.info(f"START SESSION {detector_session_id}")
+logging.info(f"START SESSION {session_id}")
 try:
     detector = Detector()
     # ask for Session Info
@@ -38,7 +40,7 @@ try:
     #print("Get Session response content:", session_dataset.json())
 
     signal.signal(signal.SIGALRM, handler)
-    signal.alarm(detect_bot_max_time)
+    signal.alarm(code_max_time)
     try:
         marked_account = detector.detect_bot(session_dataset)
         if len(marked_account) == 0: # Empty submission
@@ -63,7 +65,7 @@ try:
     #print("Detection Submission response content:", json.dumps(submission_confirmation.json(), indent=4))
 
     signal.alarm(0)
-    logging.info(f"END SESSION {detector_session_id}")
+    logging.info(f"END SESSION {session_id}")
 
 except (requests.exceptions.RequestException, ValidationError, TypeError) as exc:
     if isinstance(exc, requests.exceptions.RequestException):
