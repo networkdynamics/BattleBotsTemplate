@@ -10,11 +10,11 @@ from teams_classes import DetectionMark
 from api_requests import get_session_data, submit_detection
 import json
 
-session_id = os.getenv('SESSION_ID')
-code_max_time = os.getenv('MAX_TIME')
+session_id = int(os.getenv('SESSION_ID'))
+code_max_time = int(os.getenv('MAX_TIME'))
 
 logging.basicConfig(
-    filename='DetectorTemplate/run.log',
+    filename='run.log',
     filemode='w',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'

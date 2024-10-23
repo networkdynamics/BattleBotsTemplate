@@ -10,11 +10,11 @@ from teams_classes import User, NewUser, NewPost
 from api_requests import get_session_info, create_user_id, get_sub_session, submit_injection
 import json
 
-session_id = os.getenv('SESSION_ID')
-code_max_time = os.getenv('MAX_TIME')
+session_id = int(os.getenv('SESSION_ID'))
+code_max_time = int(os.getenv('MAX_TIME'))
 
 logging.basicConfig(
-    filename='BotTemplate/run.log',
+    filename='run.log',
     filemode='w',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
