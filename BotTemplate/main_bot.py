@@ -5,15 +5,16 @@ import requests
 from BotCode.bot import Bot
 import logging
 import signal
-from constants import bot_session_id, bot_code_max_time
 from pydantic import ValidationError
 from teams_classes import User, NewUser, NewPost
 from api_requests import get_session_info, create_user_id, get_sub_session, submit_injection
 import json
 
+session_id = int(os.getenv('SESSION_ID'))
+code_max_time = int(os.getenv('MAX_TIME'))
 
 logging.basicConfig(
-    filename='BotTemplate/run.log',
+    filename='run.log',
     filemode='w',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
@@ -32,7 +33,7 @@ def handler(signum, frame):
 
 def main():
     try:
-        logging.info(f"START SESSION {bot_session_id}")
+        logging.info(f"START SESSION {session_id}")
         bot = Bot()
         # Get session info for the present session
         session_info_response, session_info = get_session_info()
@@ -46,7 +47,7 @@ def main():
         # Give the session info to the bot teams and the id of the present sub_session and receive from their create_user
         # function their new users
         signal.signal(signal.SIGALRM, handler)
-        signal.alarm(bot_code_max_time)
+        signal.alarm(code_max_time)
         
         
         new_users = bot.create_user(session_info)
@@ -116,7 +117,7 @@ def main():
 
         signal.alarm(0)
         # Maybe add time stamp for analysis.
-        logging.info(f"END SESSION {bot_session_id}")
+        logging.info(f"END SESSION {session_id}")
 
     except (requests.exceptions.RequestException, ValidationError, TimeoutError, ValueError, TypeError, UsernameAlreadyTakenError) as exc:
         if isinstance(exc, requests.exceptions.RequestException):
