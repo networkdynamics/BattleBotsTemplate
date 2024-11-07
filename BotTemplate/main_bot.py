@@ -10,8 +10,13 @@ from teams_classes import User, NewUser, NewPost
 from api_requests import get_session_info, create_user_id, get_sub_session, submit_injection
 import json
 
+# Competition Environment Variables
 session_id = int(os.getenv('SESSION_ID'))
 code_max_time = int(os.getenv('MAX_TIME'))
+
+# Testing Environment Variables
+# session_id = 2
+# code_max_time = 3601
 
 logging.basicConfig(
     filename='run.log',
@@ -51,13 +56,7 @@ def main():
         
         
         new_users = bot.create_user(session_info)
-
-        # Verify username unique
-        for user in new_users:
-            if user.username in session_info.usernames:
-                raise UsernameAlreadyTakenError(f"UsernameAlreadyTakenError: Username need to be unique and the username {user.username} is already taken.")
-            else:
-                session_info.usernames.add(user.username)
+        
         # Verify submission format    
         if len(new_users) == 0: # Empty submission
             raise ValueError(f"Need at least 1 user create. Right now list of users is empty.")
@@ -65,6 +64,13 @@ def main():
             raise TypeError(f"The elements of the list should be NewUser instance not {type(new_users[0])}. Make sure to return a list[NewUser].")
         else:
             number_users = len(new_users)
+        
+        # Verify username unique
+        for user in new_users:
+            if user.username in session_info.usernames:
+                raise UsernameAlreadyTakenError(f"UsernameAlreadyTakenError: Username need to be unique and the username {user.username} is already taken.")
+            else:
+                session_info.usernames.add(user.username)
 
         # Create the users id for the team according to their response
         create_user_response, users_id_list = create_user_id(number_users)
@@ -135,8 +141,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# To be automated:
-# - getting the authentication token 
-# - getting the session id
-

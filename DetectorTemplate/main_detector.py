@@ -10,8 +10,13 @@ from teams_classes import DetectionMark
 from api_requests import get_session_data, submit_detection
 import json
 
+# Competition Environment Variables
 session_id = int(os.getenv('SESSION_ID'))
 code_max_time = int(os.getenv('MAX_TIME'))
+
+# Testing Environment Variables
+# session_id = 2
+# code_max_time = 3601
 
 logging.basicConfig(
     filename='run.log',
@@ -55,6 +60,9 @@ try:
     signal.alarm(code_max_time)
     try:
         marked_account = detector.detect_bot(session_dataset)
+        if not isinstance(marked_account[0], DetectionMark): # If the teams don't return a list of DetectionMark instance/object.
+            raise TypeError(f"The elements of the list should be DetectionMark instance not {type(marked_account[0])}. Make sure to return a list[DetectionMark].")
+        
         marked_id_set = set()
         for account in marked_account:
             marked_id_set.add(account.user_id)
@@ -65,8 +73,6 @@ try:
             raise MultipleDetectionForUser("Every user need to have one DetectionMark only. At least one user have more then 1 DetectionMark.")
         elif not all_id_set == marked_id_set:
             raise MarkingMissingUsers("Your submission is not giving a results for every users of the dataset. Make sure to make a DetectionMark for every user.")
-        elif not isinstance(marked_account[0], DetectionMark): # If the teams don't return a list of DetectionMark instance/object.
-            raise TypeError(f"The elements of the list should be DetectionMark instance not {type(marked_account[0])}. Make sure to return a list[DetectionMark].")
         else:
             detections_submission = [user.to_dict() for user in marked_account]
     except TimeoutError as exc:

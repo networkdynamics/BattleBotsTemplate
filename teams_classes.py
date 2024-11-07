@@ -1,11 +1,25 @@
-from pydantic import BaseModel, conint, constr, Field
+from pydantic import BaseModel, conint, constr, Field, field_validator
 from typing import Optional
 
-class NewUser(BaseModel): # Should we give this file to the teams or should we only give them a description of the one that they are going to use or should I make two different files? One for the teams and one for us? At this point do I also need to separate it between bot and detector?
+class NewUser(BaseModel):
     username: constr(min_length=1)
     name: constr(min_length=1)
     description: Optional[str] = ""
     location: Optional[str] = None
+    
+    @field_validator('location')
+    @classmethod
+    def transform_empty_to_none(cls, value):
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
+    
+    @field_validator('description')
+    @classmethod
+    def transform_none_to_empty(cls, value):
+        if value == None:
+            return ""
+        return value
 
 class User(BaseModel):
     user_id: constr(min_length=1)
