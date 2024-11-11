@@ -127,8 +127,9 @@ def main():
 
     except (requests.exceptions.RequestException, ValidationError, TimeoutError, ValueError, TypeError, UsernameAlreadyTakenError) as exc:
         if isinstance(exc, requests.exceptions.RequestException):
-            logging.error(f"An error occured: {exc}")
-            print("An error occurred:", exc)
+            error_details = exc.response.json()
+            logging.error(f"An error occured: {exc}. Error Message: {error_details.get('message', 'No message available')}")
+            print(f"An error occurred: {exc}. Error Message: {error_details.get('message', 'No message available')}")
         elif isinstance(exc, ValidationError):
             logging.error(f"Object Error: Error Description {exc.errors()}. Make sure you create your instance correctly.")
             print(f"Object Error: Error Description {exc.errors()}. Make sure you create your instance correctly.")

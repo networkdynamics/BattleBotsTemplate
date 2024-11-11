@@ -95,8 +95,9 @@ try:
 
 except (requests.exceptions.RequestException, ValidationError, TypeError, MarkingMissingUsers, MultipleDetectionForUser) as exc:
     if isinstance(exc, requests.exceptions.RequestException):
-        logging.error(f"An error occurred: {exc}")
-        print("An error occurred:", exc)
+        error_details = exc.response.json()
+        logging.error(f"An error occurred: {exc}. Error Message: {error_details.get('message', 'No message available')}")
+        print(f"An error occurred: {exc}. Error Message: {error_details.get('message', 'No message available')}")
     elif isinstance(exc, ValidationError):
         if exc.errors()[0]['type'] == 'int_from_float':
             logging.error(f"DetectionMark Object Error: The confidence should be an int between 0 (definitely not a bot) and 100 (definitely a bot). Error Description {exc.errors()}.")
