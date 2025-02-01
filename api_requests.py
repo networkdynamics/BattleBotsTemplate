@@ -8,7 +8,7 @@ authentication_token = os.getenv('AUTH_TOKEN')
 session_id = os.getenv('SESSION_ID')
 
 # Testing Environment Variables
-# base_url = 'http://52.207.242.165:3000/api/test'
+# base_url = 'http://3.83.177.68:3000/api/test'
 # authentication_token = "enter your authentication token here"
 # session_id = 2
 
