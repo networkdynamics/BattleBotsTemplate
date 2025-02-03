@@ -6,20 +6,6 @@ class NewUser(BaseModel):
     name: constr(min_length=1)
     description: Optional[str] = ""
     location: Optional[str] = None
-    
-    @field_validator('location')
-    @classmethod
-    def transform_empty_to_none(cls, value):
-        if isinstance(value, str) and not value.strip():
-            return None
-        return value
-    
-    @field_validator('description')
-    @classmethod
-    def transform_none_to_empty(cls, value):
-        if value == None:
-            return ""
-        return value
 
     @field_validator('location')
     @classmethod
@@ -33,8 +19,8 @@ class NewUser(BaseModel):
     def transform_none_to_empty(cls, value):
         if value == None:
             return ""
-        return value
-    
+        
+
 class User(BaseModel):
     user_id: constr(min_length=1)
     username: constr(min_length=1) #This one unique

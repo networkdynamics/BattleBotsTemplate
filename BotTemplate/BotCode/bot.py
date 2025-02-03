@@ -16,5 +16,7 @@ class Bot(ABot):
         # Example:
         posts = []
         for j in range(len(users_list)):
-            posts.append(NewPost(text="Pandas are amazing!", author_id=users_list[j].user_id, created_at='2024-03-17T00:20:30.000Z',user=users_list[j]))
+            posts.append(NewPost(text="Pandas are amazing!", author_id=users_list[j].user_id, created_at='2025-01-18T00:20:30.000Z',user=users_list[j]))
+            posts.append(NewPost(text="Hello World 2025!", author_id=users_list[j].user_id, created_at='2025-01-18T00:21:30.000Z',user=users_list[j]))
+            posts.append(NewPost(text="I'm a bot. Hello.", author_id=users_list[j].user_id, created_at='2025-01-18T00:22:30.000Z',user=users_list[j]))
         return posts
