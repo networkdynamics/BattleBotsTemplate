@@ -11,7 +11,7 @@ header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'ap
 # Testing Environment Variables
 # base_url = 'http://3.92.68.65:3000/api/test'
 # try:
-#     authentication_token = requests.post('http://3.92.68.65:3000/api/auth/login', headers={'Content-Type': 'application/json'}, data=json.dumps({"team_name": "EmilieAdmin", "team_password": "0911"}))
+#     authentication_token = requests.post('http://3.92.68.65:3000/api/auth/login', headers={'Content-Type': 'application/json'}, data=json.dumps({"team_name": "", "team_password": ""}))
 #     authentication_token.raise_for_status()
 # except(requests.exceptions.RequestException) as error:
 #     error_details = error.response.json()
