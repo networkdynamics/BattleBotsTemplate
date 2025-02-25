@@ -20,7 +20,8 @@ class NewUser(BaseModel):
         if value == None:
             return ""
         return value
-    
+        
+
 class User(BaseModel):
     user_id: constr(min_length=1)
     username: constr(min_length=1) #This one unique
