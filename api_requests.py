@@ -19,6 +19,7 @@ header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'ap
 # session_id = 2
 # header = {'Authorization': 'bearer ' + authentication_token.text, 'Content-Type': 'application/json'}
 
+
 #BOT SECTION
 class SessionInfo:
     def __init__(self, data):
