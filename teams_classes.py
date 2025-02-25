@@ -19,6 +19,7 @@ class NewUser(BaseModel):
     def transform_none_to_empty(cls, value):
         if value == None:
             return ""
+        return value
         
 
 class User(BaseModel):
