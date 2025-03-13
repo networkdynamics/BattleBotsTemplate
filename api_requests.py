@@ -18,6 +18,7 @@ header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'ap
 #     error_details = error.response.json()
 #     print(f"An error occurred: {error}. Error Message: {error_details.get('message', 'No message available')}")
 # session_id = 2
+
 # header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
 #BOT SECTION
