@@ -54,7 +54,8 @@ try:
 
     logging.info(f"Get Session response status code: {get_session_response.status_code}")
     print("Get Session response status code:", get_session_response.status_code)
-    #print("Get Session response content:", session_dataset.json())
+    #print("Get Session response posts:", session_dataset.posts)
+    
 
     signal.signal(signal.SIGALRM, handler)
     signal.alarm(code_max_time)
