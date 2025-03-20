@@ -9,13 +9,14 @@ from pydantic import ValidationError
 from teams_classes import User, NewUser, NewPost
 from api_requests import get_session_info, create_user_id, get_sub_session, submit_injection
 import json
+from datetime import datetime
 
 # Competition Environment Variables
 session_id = int(os.getenv('SESSION_ID'))
 code_max_time = int(os.getenv('MAX_TIME'))
 
 # Testing Environment Variables
-# session_id = 14
+# session_id = 15
 # code_max_time = 3601
 
 logging.basicConfig(
@@ -31,6 +32,10 @@ class TimeoutError(Exception):
 
 class UsernameAlreadyTakenError(Exception):
     """Custom exception for duplicate usernames."""
+    pass
+
+class PostCreatedOutsideSubSessionTime(Exception):
+    """Custom exception for post created outside of the interval of time of the sub-session."""
     pass
 
 def handler(signum, frame):
@@ -103,7 +108,14 @@ def main():
                     posts_submission = []
                 elif not isinstance(team_submission[0], NewPost): # If the teams don't return a list of NewPost instance/object.
                     raise TypeError(f"The elements of the list should be NewPost instance not {type(team_submission[0])}. Make sure to return a list[NewPost].")
-                else:
+                else: # Check if each post is created in the right sub-session time interval
+                    start_time_obj = datetime.strptime(session_info.sub_sessions_info[sub_session-1]["start_time"], '%Y-%m-%dT%H:%M:%S.%fZ')
+                    end_time_obj = datetime.strptime(session_info.sub_sessions_info[sub_session-1]["end_time"], '%Y-%m-%dT%H:%M:%S.%fZ')
+                    for post in team_submission:
+                        post_created_time_obj = datetime.strptime(post.created_at,'%Y-%m-%dT%H:%M:%S.%fZ')
+                        if post_created_time_obj<start_time_obj or post_created_time_obj>end_time_obj:
+                            raise PostCreatedOutsideSubSessionTime(f"Tried to create a post at {post.created_at} which is invalid. Every posts of sub-session {sub_session} should have a 'created_at' time greater than or equal to {session_info.sub_sessions_info[sub_session-1]["start_time"]} and less than or equal to {session_info.sub_sessions_info[sub_session-1]["end_time"]}.")
+                    # If none of the previous error were met then create the post submission
                     posts_submission = [post.to_dict(session_info.lang) for post in team_submission]
             except TimeoutError as exc:
                 logging.error(f"{exc} The generate_content code for sub-session {sub_session} ran for too long. Continuing with no submission for sub-session {sub_session}.")
@@ -125,18 +137,21 @@ def main():
         # Maybe add time stamp for analysis.
         logging.info(f"END SESSION {session_id}")
 
-    except (requests.exceptions.RequestException, ValidationError, TimeoutError, ValueError, TypeError, UsernameAlreadyTakenError) as exc:
+    except (requests.exceptions.RequestException, requests.exceptions.ConnectionError, ValidationError, TimeoutError, ValueError, TypeError, UsernameAlreadyTakenError, PostCreatedOutsideSubSessionTime) as exc:
         if isinstance(exc, requests.exceptions.RequestException):
             error_details = exc.response.json()
             logging.error(f"An error occured: {exc}. Error Message: {error_details.get('message', 'No message available')}")
             print(f"An error occurred: {exc}. Error Message: {error_details.get('message', 'No message available')}")
+        elif isinstance(exc, requests.exceptions.ConnectionError):
+            logging.error(f"Connection Error: {exc}")
+            print(f"Connection Error: {exc}")
         elif isinstance(exc, ValidationError):
             logging.error(f"Object Error: Error Description {exc.errors()}. Make sure you create your instance correctly.")
             print(f"Object Error: Error Description {exc.errors()}. Make sure you create your instance correctly.")
         elif isinstance(exc, TimeoutError):
             logging.error(f"{exc} The code to Create User ran for too long. No submission were able to be submitted.")
             print(f"{exc} The code to Create User ran for too long. No submission were able to be submitted.")
-        elif isinstance(exc, (ValueError, TypeError, UsernameAlreadyTakenError)):
+        elif isinstance(exc, (ValueError, TypeError, UsernameAlreadyTakenError, PostCreatedOutsideSubSessionTime)):
             logging.error(exc)
             print(exc)
 
