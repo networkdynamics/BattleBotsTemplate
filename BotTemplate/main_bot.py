@@ -114,7 +114,7 @@ def main():
                     for post in team_submission:
                         post_created_time_obj = datetime.strptime(post.created_at,'%Y-%m-%dT%H:%M:%S.%fZ')
                         if post_created_time_obj<start_time_obj or post_created_time_obj>end_time_obj:
-                            raise PostCreatedOutsideSubSessionTime(f"Tried to create a post at {post.created_at} which is invalid. Every posts of sub-session {sub_session} should have a 'created_at' time greater than or equal to {session_info.sub_sessions_info[sub_session-1]["start_time"]} and less than or equal to {session_info.sub_sessions_info[sub_session-1]["end_time"]}.")
+                            raise PostCreatedOutsideSubSessionTime(f"Tried to create a post at {post.created_at} which is invalid. Every posts of sub-session {sub_session} should have a 'created_at' time greater than or equal to {session_info.sub_sessions_info[sub_session-1]['start_time']} and less than or equal to {session_info.sub_sessions_info[sub_session-1]['end_time']}.")
                     # If none of the previous error were met then create the post submission
                     posts_submission = [post.to_dict(session_info.lang) for post in team_submission]
             except TimeoutError as exc:
