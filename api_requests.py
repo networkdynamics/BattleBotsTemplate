@@ -9,9 +9,9 @@ session_id = os.getenv('SESSION_ID')
 header = {'Authorization': 'bearer ' + authentication_token, 'Content-Type': 'application/json'}
 
 # Testing Environment Variables
-# base_url = 'http://3.92.68.65:3000/api/test'
+# base_url = 'http://54.145.53.252:3000/api/test'
 # try:
-#     login_response = requests.post('http://3.92.68.65:3000/api/auth/login', headers={'Content-Type': 'application/json'}, data=json.dumps({"team_name": "", "team_password": ""}))
+#     login_response = requests.post('http://54.145.53.252:3000/api/auth/login', headers={'Content-Type': 'application/json'}, data=json.dumps({"team_name": "", "team_password": ""}))
 #     login_response.raise_for_status()
 #     authentication_token = login_response.json()["auth_token"]
 # except(requests.exceptions.RequestException) as error:
