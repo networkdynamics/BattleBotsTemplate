@@ -16,6 +16,7 @@ code_max_time = int(os.getenv('MAX_TIME'))
 
 # Testing Environment Variables
 # session_id = 15
+# session_id = 15
 # code_max_time = 3601
 
 logging.basicConfig(
