@@ -49,3 +49,6 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+# MacOS file automatically created
+.DS_Store
