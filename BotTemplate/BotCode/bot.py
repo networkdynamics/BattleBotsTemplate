@@ -23,7 +23,7 @@ class Bot(ABot):
 
         posts = []
         for j in range(len(users_list)):
-            posts.append(NewPost(text="Pandas are amazing!", author_id=users_list[j].user_id, created_at=global_session_info.sub_sessions_info[datasets_json.sub_session_id-1]["start_time"],user=users_list[j]))
-            posts.append(NewPost(text="Hello World 2025!", author_id=users_list[j].user_id, created_at=global_session_info.sub_sessions_info[datasets_json.sub_session_id-1]["start_time"],user=users_list[j]))
-            posts.append(NewPost(text="I'm a bot. Hello.", author_id=users_list[j].user_id, created_at=global_session_info.sub_sessions_info[datasets_json.sub_session_id-1]["end_time"],user=users_list[j]))
+            posts.append(NewPost(text="Pandas are amazing!", author_id=users_list[j].user_id, created_at=global_session_info.sub_sessions_info[datasets_json.sub_session_id-1]["start_time"], notes={"Method": "Used hard coded response"}))
+            posts.append(NewPost(text="Hello World 2025!", author_id=users_list[j].user_id, created_at=global_session_info.sub_sessions_info[datasets_json.sub_session_id-1]["start_time"], notes={"Personality": "Friendly", "Tech": "AI"}))
+            posts.append(NewPost(text="I'm a bot. Hello.", author_id=users_list[j].user_id, created_at=global_session_info.sub_sessions_info[datasets_json.sub_session_id-1]["end_time"]))
         return posts
