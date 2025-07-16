@@ -45,6 +45,14 @@ class NewPost(BaseModel):
     text: constr(min_length=1)
     author_id: constr(min_length=1)
     created_at: str = Field(..., pattern=r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.000Z$') # Time format like this 2024-03-27T00:06:30.000Z
+    notes: Optional[dict[str, str]] = {}
+
+    @field_validator('notes')
+    @classmethod
+    def transform_none_to_empty_dict(cls, value):
+        if value == None:
+            return {}
+        return value
 
     def to_dict(self, dataset_lang):
         return {
@@ -53,6 +61,7 @@ class NewPost(BaseModel):
             "author_id": self.author_id,
             "created_at": self.created_at,
             "lang": dataset_lang,
+            "notes": self.notes
         }
 
 class DetectionMark(BaseModel):
